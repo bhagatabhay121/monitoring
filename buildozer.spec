@@ -36,9 +36,9 @@ version.filename = %(source.dir)s/main.py
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.2.1,kivymd,requests,mutagen,pydes,urllib3,chardet,idna,google,android,pillow,docutils,pygments,certifi,charset-normalizer,plyer,bidict, python-engineio,python-socketio,firebase-admin,firebase,pyrebase4,python_jwt,gcloud, sseclient, pycryptodome,sjfirebase,google-auth,google-auth-oauthlib,google-auth-httplib2,pyasn1,pyasn1-modules,cryptography,cachetools,pyfcm,jiosaavn==0.1.0,aiohttp,pydantic,asyncio,jiosaavn-python==0.2,httpx,multidict,attrs==25.1.0,yarl,propcache,async_timeout,sniffio,typing_extensions
+requirements = python3,kivy==2.2.1,kivymd,requests,urllib3,chardet,idna,google,android,pillow,docutils,pygments,certifi,charset-normalizer,plyer,bidict, python-engineio,python-socketio,firebase-admin,firebase,pyrebase4,python_jwt,gcloud, sseclient, pycryptodome,sjfirebase,google-auth,google-auth-oauthlib,google-auth-httplib2,pyasn1,pyasn1-modules,cryptography,cachetools,pyfcm
 
-p4a.local_recipes = chardet
+#p4a.local_recipes = chardet
 
 p4a.source.include_exts = py,pyd,pyx,so
 android.add_src = src
