@@ -1,3 +1,4 @@
+from kivymd.uix.list import MDList
 from kivy.uix.accordion import ListProperty
 from kivymd.uix.behaviors import HoverBehavior
 from kivy.uix.textinput import Texture
@@ -232,11 +233,209 @@ MDFloatLayout:
             MDScreen:
                 name:"homepage"
 
+                ScrollView:
+                    size_hint:1,1
+                    bar_width:0
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: "1500dp"
+                        #spacing: dp(10)
+                        #padding: dp(10)
 
-                
+                        MDFloatLayout:
+                            MDFloatLayout:
+                                md_bg_color: 0,0,1,1
+                                size_hint:1,.1
+                                pos_hint:{"center_x":.5,"center_y":.95}
+
+                            MDLabel:
+                                text:"Admin Panel"
+                                bold:True
+                                font_size: "20sp"
+                                pos_hint:{"center_x":.52,"center_y":.98}
+
+                            Hovercard:
+                                size_hint: None, None
+                                pos_hint:{"center_x":.125,"center_y": .9}
+                                size_hint: 0.2,.1
+                                elevation: 2
+                                radius: [15,]
+                                border_radius: 4
+
+                                MDLabel:
+                                    text: "Total Users"
+                                    bold: True
+                                    halign: "center"
+                                    font_size: "23sp"
+                                    pos_hint:{'center_x':.12,"center_y":.88}
+                                    theme_text_color: "Custom"
+                                    text_color: 138/255,242/255,166/255,1
+
+
+                            Hovercard:
+                                size_hint: None, None
+                                pos_hint:{"center_x":.375,"center_y": .9}
+                                size_hint: 0.2,.1
+                                elevation: 2
+                                radius: [15,]
+                                border_radius: 4
+
+                                MDLabel:
+                                    text: "Active Users"
+                                    bold: True
+                                    halign: "center"
+                                    font_size: "23sp"
+                                    pos_hint:{'center_x':.12,"center_y":.88}
+                                    theme_text_color: "Custom"
+                                    text_color: 138/255,242/255,166/255,1
+
+                            Hovercard:
+                                size_hint: None, None
+                                pos_hint:{"center_x":.625,"center_y": .9}
+                                size_hint: 0.2,.1
+                                elevation: 2
+                                radius: [15,]
+                                border_radius: 4
+
+                                MDLabel:
+                                    text:"Active User"
+                                    bold: True
+                                    halign: "center"
+                                    font_size: "23sp"
+                                    pos_hint:{'center_x':.12,"center_y":.88}
+                                    theme_text_color: "Custom"
+                                    text_color: 138/255,242/255,166/255,1
+
+                            Hovercard:
+                                size_hint: None, None
+                                pos_hint:{"center_x":.875,"center_y": .9}
+                                size_hint: 0.2,.1
+                                elevation: 2
+                                radius: [15,]
+                                border_radius: 4
+
+                                MDLabel:
+                                    text: "Threats"
+                                    bold: True
+                                    halign: "center"
+                                    font_size: "23sp"
+                                    pos_hint:{'center_x':.12,"center_y":.88}
+                                    theme_text_color: "Custom"
+                                    text_color: 138/255,242/255,166/255,1
 
                             
-        
+                            MDFloatLayout:
+                                MDCard:
+                                    size_hint: None, None
+                                    pos_hint:{"center_x":.5,"center_y": .72}
+                                    size_hint: 0.9,.2
+                                    elevation:1
+                                    radius: [10,]
+                                    border_radius: 2
+
+                                    ScrollView:
+                                        size_hint:1,.8
+                                        MDBoxLayout:
+                                            orientation: "vertical"
+                                            size_hint_y: None
+                                            height:"320dp"
+                                            spacing: dp(10)
+                                            padding: dp(10)
+
+                                            Hover1card:
+                                                size_hint: None, None
+                                                pos_hint:{"center_x":.5,"center_y": .8}
+                                                size_hint: 0.8,.1
+                                                elevation:1
+                                                radius: [10,]
+                                                border_radius: 1
+
+                                            Hover1card:
+                                                size_hint: None, None
+                                                pos_hint:{"center_x":.5,"center_y": .8}
+                                                size_hint: 0.8,.1
+                                                elevation: 1
+                                                radius: [10,]
+                                                border_radius: 2
+
+                                            Hover1card:
+                                                size_hint: None, None
+                                                pos_hint:{"center_x":.5,"center_y": .8}
+                                                size_hint: 0.8,.1
+                                                elevation: 1
+                                                radius: [10,]
+                                                border_radius: 2
+
+                                            Hover1card:
+                                                size_hint: None, None
+                                                pos_hint:{"center_x":.5,"center_y": .8}
+                                                size_hint: 0.8,.1
+                                                elevation: 1
+                                                radius: [10,]
+                                                border_radius: 2
+
+                            MDLabel:
+                                text: "Active Users"
+                                bold:True
+                                pos_hint:{"center_x":.56,"center_y": .8}
+                                font_size:"18sp"
+
+                            MDFloatLayout:
+                                MDCard:
+                                    size_hint: None, None
+                                    pos_hint:{"center_x":.5,"center_y": .49}
+                                    size_hint: 0.9,.2
+                                    elevation: 1
+                                    radius: [10,]
+                                    border_radius: 2
+
+                                    ScrollView:
+                                        size_hint:1,.8
+                                        MDBoxLayout:
+                                            orientation: "vertical"
+                                            size_hint_y: None
+                                            height:"320dp"
+                                            spacing: dp(10)
+                                            padding: dp(10)
+
+                                            Hover1card:
+                                                size_hint: None, None
+                                                pos_hint:{"center_x":.5,"center_y": .8}
+                                                size_hint: 0.8,.1
+                                                elevation: 1
+                                                radius: [10,]
+                                                border_radius: 2
+
+                                            Hover1card:
+                                                size_hint: None, None
+                                                pos_hint:{"center_x":.5,"center_y": .8}
+                                                size_hint: 0.8,.1
+                                                elevation: 1
+                                                radius: [10,]
+                                                border_radius: 2
+
+                                            Hover1card:
+                                                size_hint: None, None
+                                                pos_hint:{"center_x":.5,"center_y": .8}
+                                                size_hint: 0.8,.1
+                                                elevation: 1
+                                                radius: [10,]
+                                                border_radius: 2
+
+                                            Hover1card:
+                                                size_hint: None, None
+                                                pos_hint:{"center_x":.5,"center_y": .8}
+                                                size_hint: 0.8,.1
+                                                elevation: 1
+                                                radius: [10,]
+                                                border_radius: 2
+
+                            MDLabel:
+                                text: "Threats"
+                                bold:True
+                                pos_hint:{"center_x":.56,"center_y": .57}
+                                font_size:"18sp"                            
                 
 <ExtendedButton>
     elevation: 1
@@ -327,6 +526,23 @@ class ExtendedButton(MDFillRoundFlatIconButton, CommonElevationBehavior):
             self.radius = [value, value, value, value]
             self._radius = value
 
+class Hover1card(MDCard, HoverBehavior):
+    def on_enter(self):
+        pass
+        #md_bg_color = (1,0,0,1)
+        Animation(size_hint= (.12, .1), d=.3).start(self)
+
+    def on_leave(self):
+        pass
+       # md_bg_color = (1,1,1,1)
+        Animation(size_hint= (.08, .1), d=.3).start(self)
+
+class Hovercard(MDCard, HoverBehavior):
+    def on_enter(self):
+        Animation(size_hint= (.22, .12), d=.3).start(self)
+
+    def on_leave(self):
+        Animation(size_hint= (.2, .1), d=.3).start(self)
 
 class abhay(TwoLineAvatarIconListItem):
     pass
@@ -392,7 +608,7 @@ class MainApp(MDApp):
         return True
                 
     def on_start(self, *args):
-        pass
+        self.root.ids.screen_manager.current = "homepage"
             
     def back_screen(self, *args):
         if self.root.ids.screen_manager.current != "homepage":
