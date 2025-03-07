@@ -11,17 +11,13 @@ from kivy.core.video import Video
 from kivy.app import App
 from kivy.uix.image import Image
 from kivy.clock import Clock
-from kivy.graphics.texture import Texture
 import requests
 import cv2
-import numpy as np
-import py2exe
 from kivymd.uix.dialog import MDDialog
 
 from PIL import Image
 import time
 from kivy.uix.image import Image, AsyncImage, CoreImage
-from mutagen.id3 import ID3
 from kivymd.toast import toast
 import random
 
@@ -36,7 +32,7 @@ from kivy.clock import Clock
 from kivy.uix.label import Label
 from kivymd.uix.toolbar import MDTopAppBar
 from kivymd.uix.taptargetview import MDTapTargetView
-import cv2
+
 import threading
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -79,26 +75,12 @@ from kivymd.uix.fitimage import FitImage
 import requests
 from kivy.loader import Loader
 import sys
-import base64
-import json
 import os
-import io
 from kivymd.uix.tab import MDTabsBase
-from kivy.utils import platform
-from contextlib import closing
 from threading import Thread
 
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.image import Image
-from kivy.clock import Clock
-from kivy.graphics.texture import Texture
-import requests
-import cv2
 import numpy as np
 from kivymd.uix.behaviors import CommonElevationBehavior
-from kivy.properties import StringProperty
-from kivymd.uix.navigationrail import MDNavigationRailItem
 
 STREAM_URL = "http://192.168.93.50:5000"
 
@@ -227,7 +209,7 @@ MDFloatLayout:
                             pos: self.pos
                             radius: [8]
                     on_release:app.login()
-                    on_release: video_stream.start_stream()
+                    #on_release: video_stream.start_stream()
 
             
             MDScreen:
@@ -236,9 +218,51 @@ MDFloatLayout:
                 StreamViewer:
                     id: video_stream
 
-                
+                MDCard:
+                    size_hint: None, None
+                    pos_hint:{"center_x":.43,"center_y": .93}
+                    size_hint: 0.8,.07
+                    elevation: 2
+                    radius: [25,]
+                    border_radius: 4
 
-                            
+                    MDIconButton:
+                        icon: "server"
+                        pos_hint:{"center_x":.1,"center_y":.5}
+                        
+                    TextInput:
+                        id: server
+                        hint_text: "Enter Server Url"
+                        helper_text: "Please Enter Valid Url"
+                        size_hint: .7,None
+                        mode: "fill"
+                        pos_hint:{"center_x": .45,"center_y": .5}
+                        height: self.minimum_height
+                        multiline: False
+                        cursor_color: 0,0,0,1
+                        cursor_width:"2sp"
+                        background_color: 0,0,0,0
+                        padding: 15
+                        font_size: "18sp" 
+                        normal_color: app.theme_cls.bg_light
+                        color_active: app.theme_cls.bg_light
+                        icon_left: "magnify"
+                        foreground_color: app.theme_cls.secondary_text_color
+        
+                                    
+                    MDIconButton:
+                        id: clo
+                        icon: "magnify"
+                        pos_hint:{"center_x":.85,"center_y":.5}
+                        on_release:app.clear()
+
+                MDRaisedButton:
+                    text: "Start Stream"
+                    bold: "True"
+                    pos_hint:{"center_x":.9,"center_y":.93}
+                    on_release:app.get_url()
+                    on_release: video_stream.start_stream()
+                    
         
                 
 <ExtendedButton>
@@ -271,8 +295,9 @@ class StreamViewer(Image):
 
     def fetch_stream(self):
         """Fetch frames from the Flask stream in a separate thread."""
+        print(self.url)
         try:
-            resp = requests.get(STREAM_URL, stream=True, timeout=5)
+            resp = requests.get(self.url, stream=True, timeout=5)
             bytes_ = b''
             for chunk in resp.iter_content(chunk_size=4096):
                 if not self.running:
@@ -366,6 +391,7 @@ class MainApp(MDApp):
     exit = "0"
     password = ""
     username = "radar"
+    url = ""
     
     #win_size = min(Window.size)
     
@@ -393,8 +419,24 @@ class MainApp(MDApp):
                 self.back_screen()
  
         return True
+    
+    def check(self, *args):
+        if self.root.ids.server.text == "":
+            self.root.ids.clo.icon = ""
+
+        else:
+            self.root.ids.clo.icon = "close"
+
+    def get_url(self):
+        url = self.root.ids.server.text
+        self.url = url
+
+    def clear(self):
+        self.root.ids.server.text = ""
                 
     def on_start(self, *args):
+
+        Clock.schedule_interval(self.check, 0.1)
 
         try:
             firebase.delete("chat-app-d2935-default-rtdb/Users/password","")
