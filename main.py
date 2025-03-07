@@ -217,6 +217,7 @@ MDFloatLayout:
 
                 StreamViewer:
                     id: video_stream
+                    url: ""
 
                 MDCard:
                     size_hint: None, None
@@ -429,7 +430,7 @@ class MainApp(MDApp):
 
     def get_url(self):
         url = self.root.ids.server.text
-        self.url = url
+        self.root.ids.video_stream.url = url
 
     def clear(self):
         self.root.ids.server.text = ""
