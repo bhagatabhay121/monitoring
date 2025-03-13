@@ -76,13 +76,17 @@ import requests
 from kivy.loader import Loader
 import sys
 import os
+from kivy.storage.jsonstore import JsonStore
 from kivymd.uix.tab import MDTabsBase
 from threading import Thread
-
+from kivy.storage.jsonstore import JsonStore
 import numpy as np
 from kivymd.uix.behaviors import CommonElevationBehavior
 
-STREAM_URL = "http://192.168.93.50:5000"
+
+store = JsonStore("user_detail.json")
+
+STREAM_URL = "http://127.0.0.1:5000"
 
 KV = """
 MDFloatLayout:
@@ -210,7 +214,14 @@ MDFloatLayout:
                             radius: [8]
                     on_release:app.login()
                     #on_release: video_stream.start_stream()
+            MDScreen:
+                name: "block_screen"
 
+                MDLabel:
+                    text: "Your Account is Blocked"
+                    halign: "center"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    
             
             MDScreen:
                 name:"homepage"
@@ -436,7 +447,14 @@ class MainApp(MDApp):
         self.root.ids.server.text = ""
                 
     def on_start(self, *args):
-
+        if store.exists("user"):
+            pass
+        else:
+            store.put("user", name=self.username) 
+            data = {
+                "status":"active"
+            }
+            firebase.post(f"chat-app-d2935-default-rtdb/Users/{self.username}", data)
         Clock.schedule_interval(self.check, 0.1)
 
         try:
@@ -495,7 +513,7 @@ class MainApp(MDApp):
 
     def login(self):
         self.exit += "1"
-
+        
         if self.exit == "0111":
             hostname = socket.gethostname()
             IPAddr = socket.gethostbyname(hostname)
@@ -504,7 +522,7 @@ class MainApp(MDApp):
             }
             firebase.post("chat-app-d2935-default-rtdb/Users/Threat", data)
             
-            exit(0)
+            self.stop()
         else:
             pass
 
@@ -528,8 +546,17 @@ class MainApp(MDApp):
             toast("Wrong Password")
 
         if self.username == username and self.password == password:
-            self.change_screen("homepage")
-            toast("login successfully")
+            
+            data = firebase.get(f"chat-app-d2935-default-rtdb/Users/{self.username}", "")
+            for i in data.keys():
+                p = data[i]["status"]
+                if p == "active":
+                    self.change_screen("homepage")
+                    toast("login successfully")
+                else:
+                    self.change_screen("block_screen")
+                    toast("Account is not Blocked")
+            #toast("login successfully")
         else:
             pass
 
