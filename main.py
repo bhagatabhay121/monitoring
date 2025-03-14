@@ -452,9 +452,11 @@ class MainApp(MDApp):
         else:
             store.put("user", name=self.username) 
             data = {
-                "status":"active"
+                "name":self.username,
+                'status':"active"
             }
-            firebase.post(f"chat-app-d2935-default-rtdb/Users/{self.username}", data)
+            #firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account", "name", self.username)
+            firebase.post(f"chat-app-d2935-default-rtdb/admin/users/account", data)
         Clock.schedule_interval(self.check, 0.1)
 
         try:
@@ -546,16 +548,20 @@ class MainApp(MDApp):
             toast("Wrong Password")
 
         if self.username == username and self.password == password:
-            
-            data = firebase.get(f"chat-app-d2935-default-rtdb/Users/{self.username}", "")
-            for i in data.keys():
-                p = data[i]["status"]
-                if p == "active":
-                    self.change_screen("homepage")
-                    toast("login successfully")
-                else:
-                    self.change_screen("block_screen")
-                    toast("Account is not Blocked")
+            try:
+                data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+
+                for i in data.keys():
+                    p = data[i]["status"]
+                    if p == "active":
+                        self.change_screen("homepage")
+                        toast("login successfully")
+                    else:
+                        self.change_screen("block_screen")
+                        toast("Account is Blocked")
+
+            except:
+                pass
             #toast("login successfully")
         else:
             pass
