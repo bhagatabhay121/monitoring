@@ -273,6 +273,7 @@ MDFloatLayout:
                                         text_color: 138/255,242/255,166/255,1
 
                                     MDLabel:
+                                        id: users
                                         text: "10"
                                         bold: True
                                         halign: "center"
@@ -617,6 +618,10 @@ class MainApp(MDApp):
                 
     def on_start(self, *args):
         self.root.ids.screen_manager.current = "homepage"
+        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users", "")
+        for i in range(len(data)):
+            p = int(i)+1
+            self.root.ids.users.text = str(p)
             
     def back_screen(self, *args):
         if self.root.ids.screen_manager.current != "homepage":
