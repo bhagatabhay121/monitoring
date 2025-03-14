@@ -16,7 +16,6 @@ from kivy.graphics.texture import Texture
 import requests
 import cv2
 import numpy as np
-import py2exe
 from kivymd.uix.dialog import MDDialog
 
 from PIL import Image
@@ -263,14 +262,23 @@ MDFloatLayout:
                                 radius: [15,]
                                 border_radius: 4
 
-                                MDLabel:
-                                    text: "Total Users"
-                                    bold: True
-                                    halign: "center"
-                                    font_size: "23sp"
-                                    pos_hint:{'center_x':.12,"center_y":.88}
-                                    theme_text_color: "Custom"
-                                    text_color: 138/255,242/255,166/255,1
+                                MDRelativeLayout:
+                                    MDLabel:
+                                        text: "Total Users"
+                                        bold: True
+                                        halign: "center"
+                                        font_size: "23sp"
+                                        pos_hint: {"center_x": 0.5, "center_y": 0.9}
+                                        theme_text_color: "Custom"
+                                        text_color: 138/255,242/255,166/255,1
+
+                                    MDLabel:
+                                        text: "10"
+                                        bold: True
+                                        halign: "center"
+                                        font_size: "30sp"
+                                        theme_text_color: "Custom"
+                                        text_color: 138/255,242/255,166/255,1
 
 
                             Hovercard:
