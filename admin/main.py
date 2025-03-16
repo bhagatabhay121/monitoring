@@ -573,7 +573,7 @@ class MainApp(MDApp):
     exit = "0"
     password = ""
     username = ""
-    
+    dialog = None
     #win_size = min(Window.size)
     
     def build(self):
@@ -723,6 +723,35 @@ class MainApp(MDApp):
         }
 
         print(device_info)
+
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title="Information",
+                text=f"IP Address: {n}\n"
+                f"Country: {info['Country']}\n"
+                f"Region: {info['Region']}\n"
+                f"City: {info['City']}\n"
+                f"Latitude: {info['Latitude']}\n"
+                f"Longitude: {info['Longitude']}\n"
+
+                f"ISP: {info['ISP']}\n"
+                f"Organization: {info['Organization']}\n"
+                f"Time Zone: {info['Time Zone']}\n"
+                f"ZIP Code: {info['ZIP Code']}\n"
+
+                f"OS: {device_info['OS']}\n"
+                f"OS Version: {device_info['OS Version']}\n"
+                f"Device Name: {device_info['Device Name']}\n"
+                f"Processor: {device_info['Processor']}\n"
+                f"Architecture: {device_info['Architecture']}\n"
+                f"Username: {device_info['Username']}\n"
+
+                
+                
+                
+                
+            )
+        self.dialog.open()
 
     def block_user(self, n):
 
