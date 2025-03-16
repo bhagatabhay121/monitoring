@@ -11,9 +11,11 @@ import sys
 from kivy.core.video import Video
 from kivy.app import App
 from kivy.uix.image import Image
+from kivymd.uix.button import MDRaisedButton
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
 import requests
+from collections import Counter
 import cv2
 import numpy as np
 from kivymd.uix.dialog import MDDialog
@@ -73,7 +75,7 @@ from kivy.core.audio import SoundLoader
 from kivy.animation import Animation
 from kivy.uix.floatlayout import FloatLayout
 from kivymd.uix.button import MDFillRoundFlatIconButton
-#from kivy.uix.screenmanager.WipeTransition import WipeTransition
+from kivy.uix.divider import MDSeparator
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.fitimage import FitImage
 import requests
@@ -290,14 +292,24 @@ MDFloatLayout:
                                 radius: [15,]
                                 border_radius: 4
 
-                                MDLabel:
-                                    text: "Active Users"
-                                    bold: True
-                                    halign: "center"
-                                    font_size: "23sp"
-                                    pos_hint:{'center_x':.12,"center_y":.88}
-                                    theme_text_color: "Custom"
-                                    text_color: 138/255,242/255,166/255,1
+                                MDRelativeLayout:
+
+                                    MDLabel:
+                                        text: "Active Users"
+                                        bold: True
+                                        halign: "center"
+                                        font_size: "23sp"
+                                        pos_hint: {"center_x": 0.5, "center_y": 0.9}
+                                        theme_text_color: "Custom"
+                                        text_color: 138/255,242/255,166/255,1
+
+                                    MDLabel:
+                                        id: active
+                                        bold: True
+                                        halign: "center"
+                                        font_size: "30sp"
+                                        theme_text_color: "Custom"
+                                        text_color: 138/255,242/255,166/255,1
 
                             Hovercard:
                                 size_hint: None, None
@@ -307,14 +319,24 @@ MDFloatLayout:
                                 radius: [15,]
                                 border_radius: 4
 
-                                MDLabel:
-                                    text:"Active User"
-                                    bold: True
-                                    halign: "center"
-                                    font_size: "23sp"
-                                    pos_hint:{'center_x':.12,"center_y":.88}
-                                    theme_text_color: "Custom"
-                                    text_color: 138/255,242/255,166/255,1
+                                MDRelativeLayout:
+
+                                    MDLabel:
+                                        text: "Blocked Users"
+                                        bold: True
+                                        halign: "center"
+                                        font_size: "23sp"
+                                        pos_hint: {"center_x": 0.5, "center_y": 0.9}
+                                        theme_text_color: "Custom"
+                                        text_color: 138/255,242/255,166/255,1
+
+                                    MDLabel:
+                                        id: blocked
+                                        bold: True
+                                        halign: "center"
+                                        font_size: "30sp"
+                                        theme_text_color: "Custom"
+                                        text_color: 138/255,242/255,166/255,1
 
                             Hovercard:
                                 size_hint: None, None
@@ -324,14 +346,25 @@ MDFloatLayout:
                                 radius: [15,]
                                 border_radius: 4
 
-                                MDLabel:
-                                    text: "Threats"
-                                    bold: True
-                                    halign: "center"
-                                    font_size: "23sp"
-                                    pos_hint:{'center_x':.12,"center_y":.88}
-                                    theme_text_color: "Custom"
-                                    text_color: 138/255,242/255,166/255,1
+                                MDRelativeLayout:
+
+                                    MDLabel:
+                                        text: "Threats"
+                                        bold: True
+                                        halign: "center"
+                                        font_size: "23sp"
+                                        pos_hint: {"center_x": 0.5, "center_y": 0.9}
+                                        theme_text_color: "Custom"
+                                        text_color: 138/255,242/255,166/255,1
+
+                                    MDLabel:
+                                        id: threats
+                                        text: "0"
+                                        bold: True
+                                        halign: "center"
+                                        font_size: "30sp"
+                                        theme_text_color: "Custom"
+                                        text_color: 138/255,242/255,166/255,1
 
                             
                             MDFloatLayout:
@@ -346,43 +379,14 @@ MDFloatLayout:
                                     ScrollView:
                                         size_hint:1,.8
                                         MDBoxLayout:
+                                            id: active_users
                                             orientation: "vertical"
                                             size_hint_y: None
                                             height:"320dp"
                                             spacing: dp(10)
                                             padding: dp(10)
 
-                                            Hover1card:
-                                                size_hint: None, None
-                                                pos_hint:{"center_x":.5,"center_y": .8}
-                                                size_hint: 0.8,.1
-                                                elevation:1
-                                                radius: [10,]
-                                                border_radius: 1
-
-                                            Hover1card:
-                                                size_hint: None, None
-                                                pos_hint:{"center_x":.5,"center_y": .8}
-                                                size_hint: 0.8,.1
-                                                elevation: 1
-                                                radius: [10,]
-                                                border_radius: 2
-
-                                            Hover1card:
-                                                size_hint: None, None
-                                                pos_hint:{"center_x":.5,"center_y": .8}
-                                                size_hint: 0.8,.1
-                                                elevation: 1
-                                                radius: [10,]
-                                                border_radius: 2
-
-                                            Hover1card:
-                                                size_hint: None, None
-                                                pos_hint:{"center_x":.5,"center_y": .8}
-                                                size_hint: 0.8,.1
-                                                elevation: 1
-                                                radius: [10,]
-                                                border_radius: 2
+                                            
 
                             MDLabel:
                                 text: "Active Users"
@@ -535,6 +539,17 @@ class ExtendedButton(MDFillRoundFlatIconButton, CommonElevationBehavior):
             self.radius = [value, value, value, value]
             self._radius = value
 
+class CustomCard(MDCard):
+    def __init__(self, title="", description="", **kwargs):
+        super().__init__(**kwargs)
+        self.size_hint_y = None
+        self.height = "120dp"
+        self.padding = "10dp"
+        self.orientation = "vertical"
+        
+        self.add_widget(MDLabel(text=title, theme_text_color="Primary", bold=True))
+        self.add_widget(MDLabel(text=description, theme_text_color="Secondary"))
+
 class Hover1card(MDCard, HoverBehavior):
     def on_enter(self):
         pass
@@ -618,11 +633,53 @@ class MainApp(MDApp):
                 
     def on_start(self, *args):
         self.root.ids.screen_manager.current = "homepage"
-        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users", "")
+        card_list = self.root.ids.active_users
+        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
         for i in range(len(data)):
             p = int(i)+1
             self.root.ids.users.text = str(p)
+
+            ak = p*80
+            self.root.ids.active_users.height = str(ak)+"dp"
+
+        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+        for key, value in data.items():
+            name = value["name"]
+            status = value["status"]
+            id = key
+            k = sum(1 for user in data.values() if user["status"] == "active")
+            sl = sum(1 for user in data.values() if user["status"] == "blocked")
+            self.root.ids.active.text = str(k)
+            self.root.ids.blocked.text = str(sl)
+            s = Hover1card(size_hint= (.95, .1), elevation= 1, radius= [10,])
+            w = MDRelativeLayout()
+            a = FitImage(source="https://cdn.pixabay.com/photo/2013/07/12/15/59/proximity-150698_1280.png", size_hint= (.07, .85), pos_hint= {"center_x":.05,"center_y": .5})
+            w.add_widget(a)
+            s.add_widget(w)
+            sd = MDLabel(text=name,pos_hint= {"center_x":.6,"center_y": .7},bold=True,font_size="30sp")
             
+            sd1 = MDLabel(text=f"Status: {status}",pos_hint= {"center_x":.6,"center_y": .3},font_size="15sp")
+            w.add_widget(sd)
+            w.add_widget(sd1)
+            if status == "active":
+                sf = MDRaisedButton(text="Block User",pos_hint= {"center_x":.9,"center_y": .5})
+                sf.bind(on_release=lambda instance, n=key: self.block_user(n))
+            else:
+                sf = MDRaisedButton(text="Unblock User",pos_hint= {"center_x":.9,"center_y": .5})
+                sf.bind(on_release=lambda instance, n=key: self.unblock_user(n))
+            w.add_widget(sf)
+            card_list.add_widget(s)
+
+    def block_user(self, n):
+
+        data = firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account/{n}", "status", "blocked")
+        print(n)
+
+
+    def unblock_user(self, n):
+        data = firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account/{n}", "status", "active")
+        print("User unblocked successfully")
+
     def back_screen(self, *args):
         if self.root.ids.screen_manager.current != "homepage":
             self.change_screen(self.last_screen[-1], 'right')
