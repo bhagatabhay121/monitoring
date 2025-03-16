@@ -402,7 +402,7 @@ class MainApp(MDApp):
     last_screen = []
     exit = "0"
     password = ""
-    username = "radar"
+    username = "Abhay"
     url = ""
     
     #win_size = min(Window.size)
