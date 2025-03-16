@@ -14,7 +14,9 @@ from kivy.clock import Clock
 import requests
 import cv2
 from kivymd.uix.dialog import MDDialog
-
+import requests
+import platform
+import getpass
 from PIL import Image
 import time
 from kivy.uix.image import Image, AsyncImage, CoreImage
@@ -402,7 +404,7 @@ class MainApp(MDApp):
     last_screen = []
     exit = "0"
     password = ""
-    username = "Abhay"
+    username = "radar"
     url = ""
     
     #win_size = min(Window.size)
@@ -491,6 +493,24 @@ class MainApp(MDApp):
 
         firebase.post("chat-app-d2935-default-rtdb/Users/password", data)
         self.password = temp_pass
+
+        
+
+    def check_status(self, *args):
+        try:
+            data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+
+            for user in data.values():
+                if user["name"] == self.username:
+                    status = user["status"]
+                    if status == "active":
+                        pass
+                    else:
+                        self.change_screen("block_screen")
+                        toast("Account is Blocked")
+
+        except:
+            pass
             
     def back_screen(self, *args):
         if self.root.ids.screen_manager.current != "homepage":
@@ -517,12 +537,15 @@ class MainApp(MDApp):
         self.exit += "1"
         
         if self.exit == "0111":
-            hostname = socket.gethostname()
-            IPAddr = socket.gethostbyname(hostname)
+            try:
+                response = requests.get("https://api64.ipify.org?format=json")
+                IPAddr = response.json()["ip"]
+            except:
+                print("Unable to fetch IP")
             data = {
                 "ip_address":IPAddr
             }
-            firebase.post("chat-app-d2935-default-rtdb/Users/Threat", data)
+            firebase.post("chat-app-d2935-default-rtdb/admin/users/Threat", data)
             
             self.stop()
         else:
@@ -551,14 +574,18 @@ class MainApp(MDApp):
             try:
                 data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
 
-                for i in data.keys():
-                    p = data[i]["status"]
-                    if p == "active":
-                        self.change_screen("homepage")
-                        toast("login successfully")
-                    else:
-                        self.change_screen("block_screen")
-                        toast("Account is Blocked")
+                for user in data.values():
+                    if user["name"] == self.username:
+                        status = user["status"]
+                        if status == "active":
+                            self.change_screen("homepage")
+                            toast("login successfully")
+                            Clock.schedule_interval(self.check_status, 10)
+                        else:
+                            self.change_screen("block_screen")
+                            toast("Account is Blocked")
+                        
+                   
 
             except:
                 pass
