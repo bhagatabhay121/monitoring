@@ -624,32 +624,40 @@ class MainApp(MDApp):
             self.root.ids.active_users.height = str(ak)+"dp"
 
         data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+        print(data)
         for key, value in data.items():
-            name = value["name"]
-            status = value["status"]
-            id = key
-            k = sum(1 for user in data.values() if user["status"] == "active")
-            sl = sum(1 for user in data.values() if user["status"] == "blocked")
-            self.root.ids.active.text = str(k)
-            self.root.ids.blocked.text = str(sl)
-            s = Hover1card(size_hint= (.95, .1), elevation= 1, radius= [10,])
-            w = MDRelativeLayout()
-            a = FitImage(source="https://cdn.pixabay.com/photo/2013/07/12/15/59/proximity-150698_1280.png", size_hint= (.08, .85), pos_hint= {"center_x":.05,"center_y": .5})
-            w.add_widget(a)
-            s.add_widget(w)
-            sd = MDLabel(text=name,pos_hint= {"center_x":.6,"center_y": .7},bold=True,font_size="30sp")
-            
-            sd1 = MDLabel(text=f"Status: {status}",pos_hint= {"center_x":.6,"center_y": .3},font_size="15sp")
-            w.add_widget(sd)
-            w.add_widget(sd1)
-            if status == "active":
-                sf = MDRaisedButton(text="Block User",pos_hint= {"center_x":.9,"center_y": .5})
-                sf.bind(on_release=lambda instance, n=key: self.block_user(n))
-            else:
-                sf = MDRaisedButton(text="Unblock User",pos_hint= {"center_x":.9,"center_y": .5})
-                sf.bind(on_release=lambda instance, n=key: self.unblock_user(n))
-            w.add_widget(sf)
-            card_list.add_widget(s)
+            try:
+                name = value["name"]
+                status = value["status"]
+                tim = value["entry_time"]
+                print(tim)
+                id = key
+                k = sum(1 for user in data.values() if user["status"] == "active")
+                sl = sum(1 for user in data.values() if user["status"] == "blocked")
+                self.root.ids.active.text = str(k)
+                self.root.ids.blocked.text = str(sl)
+                s = Hover1card(size_hint= (.95, .1), elevation= 1, radius= [10,])
+                w = MDRelativeLayout()
+                a = FitImage(source="https://cdn.pixabay.com/photo/2013/07/12/15/59/proximity-150698_1280.png", size_hint= (.08, .85), pos_hint= {"center_x":.05,"center_y": .5})
+                w.add_widget(a)
+                s.add_widget(w)
+                sd = MDLabel(text=name,pos_hint= {"center_x":.6,"center_y": .7},bold=True,font_size="30sp")
+                sd1 = MDLabel(text=f"Status: {status}",pos_hint= {"center_x":.6,"center_y": .3},font_size="15sp")
+                sd2 = MDLabel(text=f"Entry Time: {tim}",pos_hint= {"center_x":.8,"center_y": .3},font_size="15sp")
+                w.add_widget(sd)
+                w.add_widget(sd1)
+                w.add_widget(sd2)
+                if status == "active":
+                    sf = MDRaisedButton(text="Block User",pos_hint= {"center_x":.9,"center_y": .5})
+                    sf.bind(on_release=lambda instance, n=key: self.block_user(n))
+                else:
+                    sf = MDRaisedButton(text="Unblock User",pos_hint= {"center_x":.9,"center_y": .5})
+                    sf.bind(on_release=lambda instance, n=key: self.unblock_user(n))
+                w.add_widget(sf)
+                card_list.add_widget(s)
+
+            except:
+                pass
 
 
     def get_ip(self):
