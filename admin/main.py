@@ -40,6 +40,7 @@ from kivymd.uix.toolbar import MDTopAppBar
 from kivymd.uix.taptargetview import MDTapTargetView
 import cv2
 import threading
+import getpass
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.relativelayout import MDRelativeLayout
@@ -58,6 +59,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivymd.uix.spinner import MDSpinner
 from kivy.network.urlrequest import UrlRequest
 import os
+import platform
 from PIL import Image as PILimage
 from kivymd.uix.behaviors import FakeRectangularElevationBehavior
 import time
@@ -75,7 +77,6 @@ from kivy.core.audio import SoundLoader
 from kivy.animation import Animation
 from kivy.uix.floatlayout import FloatLayout
 from kivymd.uix.button import MDFillRoundFlatIconButton
-from kivy.uix.divider import MDSeparator
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.fitimage import FitImage
 import requests
@@ -86,7 +87,6 @@ import json
 import os
 import io
 from kivymd.uix.tab import MDTabsBase
-from kivy.utils import platform
 from contextlib import closing
 from threading import Thread
 
@@ -406,43 +406,13 @@ MDFloatLayout:
                                     ScrollView:
                                         size_hint:1,.8
                                         MDBoxLayout:
+                                            id: threats_list
                                             orientation: "vertical"
                                             size_hint_y: None
                                             height:"320dp"
                                             spacing: dp(10)
                                             padding: dp(10)
 
-                                            Hover1card:
-                                                size_hint: None, None
-                                                pos_hint:{"center_x":.5,"center_y": .8}
-                                                size_hint: 0.8,.1
-                                                elevation: 1
-                                                radius: [10,]
-                                                border_radius: 2
-
-                                            Hover1card:
-                                                size_hint: None, None
-                                                pos_hint:{"center_x":.5,"center_y": .8}
-                                                size_hint: 0.8,.1
-                                                elevation: 1
-                                                radius: [10,]
-                                                border_radius: 2
-
-                                            Hover1card:
-                                                size_hint: None, None
-                                                pos_hint:{"center_x":.5,"center_y": .8}
-                                                size_hint: 0.8,.1
-                                                elevation: 1
-                                                radius: [10,]
-                                                border_radius: 2
-
-                                            Hover1card:
-                                                size_hint: None, None
-                                                pos_hint:{"center_x":.5,"center_y": .8}
-                                                size_hint: 0.8,.1
-                                                elevation: 1
-                                                radius: [10,]
-                                                border_radius: 2
 
                             MDLabel:
                                 text: "Threats"
@@ -633,7 +603,18 @@ class MainApp(MDApp):
                 
     def on_start(self, *args):
         self.root.ids.screen_manager.current = "homepage"
+        self.get()
+
+        self.get_ip()
+
+    def remove_ip(self, n):
+        data = firebase.delete(f"chat-app-d2935-default-rtdb/admin/users/Threat/{n}", "")
+        toast("IP Address removed successfully")
+        self.get_ip()
+
+    def get(self):
         card_list = self.root.ids.active_users
+        card_list.clear_widgets()
         data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
         for i in range(len(data)):
             p = int(i)+1
@@ -653,7 +634,7 @@ class MainApp(MDApp):
             self.root.ids.blocked.text = str(sl)
             s = Hover1card(size_hint= (.95, .1), elevation= 1, radius= [10,])
             w = MDRelativeLayout()
-            a = FitImage(source="https://cdn.pixabay.com/photo/2013/07/12/15/59/proximity-150698_1280.png", size_hint= (.07, .85), pos_hint= {"center_x":.05,"center_y": .5})
+            a = FitImage(source="https://cdn.pixabay.com/photo/2013/07/12/15/59/proximity-150698_1280.png", size_hint= (.08, .85), pos_hint= {"center_x":.05,"center_y": .5})
             w.add_widget(a)
             s.add_widget(w)
             sd = MDLabel(text=name,pos_hint= {"center_x":.6,"center_y": .7},bold=True,font_size="30sp")
@@ -670,15 +651,90 @@ class MainApp(MDApp):
             w.add_widget(sf)
             card_list.add_widget(s)
 
+
+    def get_ip(self):
+        threat_list = self.root.ids.threats_list
+        threat_list.clear_widgets()
+        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/Threat", "")
+        try:
+            for i in range(len(data)):
+                p = int(i)+1
+
+                ak = p*80
+                self.root.ids.threats_list.height = str(ak)+"dp"
+
+        except:
+            pass
+
+        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/Threat", "")
+        try:
+            ip_count = len(data)
+            self.root.ids.threats.text = str(ip_count)
+            for key, value in data.items():
+                name = value["ip_address"]
+
+                s = Hover1card(size_hint= (.95, .1), elevation= 1, radius= [10,])
+                s.bind(on_release=lambda instance, n=name: self.info(n))
+                w = MDRelativeLayout()
+                a = FitImage(source="https://cdn.pixabay.com/photo/2013/07/12/15/59/proximity-150698_1280.png", size_hint= (.08, .85), pos_hint= {"center_x":.05,"center_y": .5})
+                w.add_widget(a)
+                sd = MDLabel(text=f"IP Address: {name}",pos_hint= {"center_x":.6,"center_y": .7},bold=True,font_size="30sp")
+                w.add_widget(sd)
+                s.add_widget(w)
+                sf = MDRaisedButton(text="Remove IP",pos_hint= {"center_x":.9,"center_y": .5})
+                sf.bind(on_release=lambda instance, n=key: self.remove_ip(n))
+                w.add_widget(sf)
+                threat_list.add_widget(s)
+
+        except:
+            pass
+
+    def info(self, n):
+        response = requests.get(f"http://ip-api.com/json/{n}")
+        data = response.json()
+
+        if data["status"] == "success":
+            info = {
+                "IP Address": data["query"],
+                "Country": data["country"],
+                "Region": data["regionName"],
+                "City": data["city"],
+                "Latitude": data["lat"],
+                "Longitude": data["lon"],
+                "ISP": data["isp"],
+                "Organization": data["org"],
+                "Time Zone": data["timezone"],
+                "ZIP Code": data["zip"],
+            }
+
+            print(info)
+
+        else:
+            print("Error:Could not retrieve details")
+
+
+        device_info = {
+            "OS": platform.system(),
+            "OS Version": platform.version(),
+            "Device Name": platform.node(),
+            "Username": getpass.getuser(),
+            "Processor": platform.processor(),
+            "Architecture": platform.architecture()[0]
+        }
+
+        print(device_info)
+
     def block_user(self, n):
 
         data = firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account/{n}", "status", "blocked")
-        print(n)
+        toast("User blocked successfully")
+        self.get()
 
 
     def unblock_user(self, n):
         data = firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account/{n}", "status", "active")
-        print("User unblocked successfully")
+        toast("User unblocked successfully")
+        self.get()
 
     def back_screen(self, *args):
         if self.root.ids.screen_manager.current != "homepage":
