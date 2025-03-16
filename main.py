@@ -84,7 +84,7 @@ from threading import Thread
 from kivy.storage.jsonstore import JsonStore
 import numpy as np
 from kivymd.uix.behaviors import CommonElevationBehavior
-
+from datetime import datetime
 
 store = JsonStore("user_detail.json")
 
@@ -494,7 +494,14 @@ class MainApp(MDApp):
         firebase.post("chat-app-d2935-default-rtdb/Users/password", data)
         self.password = temp_pass
 
-        
+        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+        for key, value in data.items():
+            if value["name"] == self.username:
+                print(key)
+                time = datetime.now().strftime("%H:%M:%S")
+               
+                ak = firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account/{key}", "entry_time", str(time))
+                print(ak)
 
     def check_status(self, *args):
         try:
