@@ -4,7 +4,7 @@ from kivymd.uix.behaviors import HoverBehavior
 from kivy.uix.textinput import Texture
 from kivymd.uix.bottomnavigation.bottomnavigation import MDScreen
 from firebase import firebase
-firebase = firebase.FirebaseApplication("https://chat-app-d2935-default-rtdb.firebaseio.com/", None)
+firebase = firebase.FirebaseApplication("https://monitoring-10a0d-default-rtdb.firebaseio.com/", None)
 import socket
 import random
 import sys
@@ -608,14 +608,14 @@ class MainApp(MDApp):
         self.get_ip()
 
     def remove_ip(self, n):
-        data = firebase.delete(f"chat-app-d2935-default-rtdb/admin/users/Threat/{n}", "")
+        data = firebase.delete(f"monitoring-10a0d-default-rtdb/admin/users/Threat/{n}", "")
         toast("IP Address removed successfully")
         self.get_ip()
 
     def get(self):
         card_list = self.root.ids.active_users
         card_list.clear_widgets()
-        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+        data = firebase.get(f"monitoring-10a0d-default-rtdb/admin/users/account", "")
         for i in range(len(data)):
             p = int(i)+1
             self.root.ids.users.text = str(p)
@@ -623,7 +623,7 @@ class MainApp(MDApp):
             ak = p*80
             self.root.ids.active_users.height = str(ak)+"dp"
 
-        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+        data = firebase.get(f"monitoring-10a0d-default-rtdb/admin/users/account", "")
         print(data)
         for key, value in data.items():
             try:
@@ -663,7 +663,7 @@ class MainApp(MDApp):
     def get_ip(self):
         threat_list = self.root.ids.threats_list
         threat_list.clear_widgets()
-        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/Threat", "")
+        data = firebase.get(f"monitoring-10a0d-default-rtdb/admin/users/Threat", "")
         try:
             for i in range(len(data)):
                 p = int(i)+1
@@ -674,7 +674,7 @@ class MainApp(MDApp):
         except:
             pass
 
-        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/Threat", "")
+        data = firebase.get(f"monitoring-10a0d-default-rtdb/admin/users/Threat", "")
         try:
             ip_count = len(data)
             self.root.ids.threats.text = str(ip_count)
@@ -763,13 +763,13 @@ class MainApp(MDApp):
 
     def block_user(self, n):
 
-        data = firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account/{n}", "status", "blocked")
+        data = firebase.put(f"monitoring-10a0d-default-rtdb/admin/users/account/{n}", "status", "blocked")
         toast("User blocked successfully")
         self.get()
 
 
     def unblock_user(self, n):
-        data = firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account/{n}", "status", "active")
+        data = firebase.put(f"monitoring-10a0d-default-rtdb/admin/users/account/{n}", "status", "active")
         toast("User unblocked successfully")
         self.get()
 
@@ -804,7 +804,7 @@ class MainApp(MDApp):
 
         
         username = self.root.ids.username.text
-        res = firebase.get("chat-app-d2935-default-rtdb/admin", "")
+        res = firebase.get("monitoring-10a0d-default-rtdb/admin", "")
 
         print(res)
         for i in res.keys():
