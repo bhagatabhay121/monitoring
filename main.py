@@ -3,7 +3,7 @@ from kivymd.uix.behaviors import HoverBehavior
 from kivy.uix.textinput import Texture
 from kivymd.uix.bottomnavigation.bottomnavigation import MDScreen
 from firebase import firebase
-firebase = firebase.FirebaseApplication("https://chat-app-d2935-default-rtdb.firebaseio.com/", None)
+firebase = firebase.FirebaseApplication("https://monitoring-10a0d-default-rtdb.firebaseio.com/", None)
 import socket
 import random
 import sys
@@ -458,11 +458,11 @@ class MainApp(MDApp):
                 'status':"active"
             }
             #firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account", "name", self.username)
-            firebase.post(f"chat-app-d2935-default-rtdb/admin/users/account", data)
+            firebase.post(f"monitoring-10a0d-default-rtdb/admin/users/account", data)
         Clock.schedule_interval(self.check, 0.1)
 
         try:
-            firebase.delete("chat-app-d2935-default-rtdb/Users/password","")
+            firebase.delete("monitoring-10a0d-default-rtdb/Users/password","")
 
         except:
             pass
@@ -491,21 +491,21 @@ class MainApp(MDApp):
             "password":temp_pass
         }
 
-        firebase.post("chat-app-d2935-default-rtdb/Users/password", data)
+        firebase.post("monitoring-10a0d-default-rtdb/Users/password", data)
         self.password = temp_pass
 
-        data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+        data = firebase.get(f"monitoring-10a0d-default-rtdb/admin/users/account", "")
         for key, value in data.items():
             if value["name"] == self.username:
                 print(key)
                 time = datetime.now().strftime("%H:%M:%S")
                
-                ak = firebase.put(f"chat-app-d2935-default-rtdb/admin/users/account/{key}", "entry_time", str(time))
+                ak = firebase.put(f"monitoring-10a0d-default-rtdb/admin/users/account/{key}", "entry_time", str(time))
                 print(ak)
 
     def check_status(self, *args):
         try:
-            data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+            data = firebase.get(f"monitoring-10a0d-default-rtdb/admin/users/account", "")
 
             for user in data.values():
                 if user["name"] == self.username:
@@ -552,7 +552,7 @@ class MainApp(MDApp):
             data = {
                 "ip_address":IPAddr
             }
-            firebase.post("chat-app-d2935-default-rtdb/admin/users/Threat", data)
+            firebase.post("monitoring-10a0d-default-rtdb/admin/users/Threat", data)
             
             self.stop()
         else:
@@ -579,7 +579,7 @@ class MainApp(MDApp):
 
         if self.username == username and self.password == password:
             try:
-                data = firebase.get(f"chat-app-d2935-default-rtdb/admin/users/account", "")
+                data = firebase.get(f"monitoring-10a0d-default-rtdb/admin/users/account", "")
 
                 for user in data.values():
                     if user["name"] == self.username:
